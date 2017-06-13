@@ -10,7 +10,8 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.botnroll.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -67,6 +68,7 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAstVisitor<Void> {
     private final MakeBlockConfiguration brickConfiguration;
     private boolean isTimerSensorUsed;
+    private boolean isInfraredSensorUsed;
     private boolean isTemperatureSensorUsed;
     private String temperatureSensorPort;
     private boolean isToneActionUsed;
@@ -85,6 +87,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.usedActors = usedHardwareVisitor.getUsedActors();
         this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
+        this.isInfraredSensorUsed = usedHardwareVisitor.isInfraredSensorUsed();
         this.isTemperatureSensorUsed = usedHardwareVisitor.isTemperatureSensorUsed();
         this.isToneActionUsed = usedHardwareVisitor.isToneActionUsed();
     }
@@ -340,7 +343,17 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
+            case DISTANCE: // TODO: change to send or create actor
 
+                break;
+            case SEEK: // TODO: change to receive or remove mode
+                //  ">> 16 & 0xff" add
+                this.sb.append("ir.value");
+                break;
+            default:
+                throw new DbcException("Invalid Infrared Sensor Mode!");
+        }
         return null;
     }
 
@@ -681,6 +694,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
+        if ( this.isInfraredSensorUsed ) {
+            nlIndent();
+            this.sb.append("ir.begin();");
+        }
         this.sb.append("\n}");
     }
 
@@ -697,6 +714,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                 case COLOR:
                     break;
                 case INFRARED:
+                    this.sb.append("MeIR ir;\n");
                     break;
                 case ULTRASONIC:
                     this.sb.append("MeUltrasonicSensor ultraSensor(" + usedSensor.getPort() + ");\n");

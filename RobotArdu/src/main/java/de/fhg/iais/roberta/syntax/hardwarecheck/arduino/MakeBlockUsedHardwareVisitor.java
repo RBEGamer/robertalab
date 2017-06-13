@@ -51,6 +51,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     private boolean isTimerSensorUsed;
     private boolean isTemperatureSensorUsed;
     private boolean isToneActionUsed;
+    private boolean isInfraredSensorUsed;
 
     private Configuration brickConfiguration;
 
@@ -88,6 +89,10 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     public boolean isTemperatureSensorUsed() {
         return this.isTemperatureSensorUsed;
+    }
+
+    public boolean isInfraredSensorUsed() {
+        return this.isInfraredSensorUsed;
     }
 
     public boolean isToneActionUsed() {
@@ -219,6 +224,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), SensorType.INFRARED, null));
+        this.isInfraredSensorUsed = true;
         return null;
     }
 
