@@ -89,7 +89,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     public boolean isTemperatureSensorUsed() {
         return this.isTemperatureSensorUsed;
     }
-    
+
     public boolean isToneActionUsed() {
         return this.isToneActionUsed;
     }
@@ -212,7 +212,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.GYRO, null));
+        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
         return null;
     }
 
@@ -236,7 +236,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LIGHT, null));
+        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LIGHT, lightSensor.getMode()));
         return null;
     }
 
@@ -273,7 +273,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         return null;
     }
-    
+
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.isToneActionUsed = true;
