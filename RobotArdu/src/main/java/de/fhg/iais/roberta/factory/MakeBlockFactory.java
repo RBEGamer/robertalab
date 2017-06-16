@@ -31,12 +31,12 @@ import de.fhg.iais.roberta.mode.action.botnroll.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.makeblock.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.botnroll.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.botnroll.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.botnroll.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.makeblock.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.JoystickMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.SensorPort;
@@ -50,7 +50,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class MakeBlockFactory extends AbstractRobotFactory {
-    private MakeBlockCompilerWorkflow compilerWorkflow;
+    private final MakeBlockCompilerWorkflow compilerWorkflow;
     private final Properties properties;
     private final String name;
     private final int robotPropertyNumber;

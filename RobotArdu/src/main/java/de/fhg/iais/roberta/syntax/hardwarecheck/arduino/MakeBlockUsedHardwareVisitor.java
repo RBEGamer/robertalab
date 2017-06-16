@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -216,8 +217,8 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
+    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        this.usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, null));
         return null;
     }
 
@@ -289,6 +290,12 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
         this.usedSensors.add(new UsedSensor(joystick.getPort(), SensorType.JOYSTICK, null));
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        // TODO Auto-generated method stub
         return null;
     }
 

@@ -54,6 +54,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -67,11 +68,11 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
  */
 public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAstVisitor<Void> {
     private final MakeBlockConfiguration brickConfiguration;
-    private boolean isTimerSensorUsed;
-    private boolean isInfraredSensorUsed;
-    private boolean isTemperatureSensorUsed;
+    private final boolean isTimerSensorUsed;
+    private final boolean isInfraredSensorUsed;
+    private final boolean isTemperatureSensorUsed;
     private String temperatureSensorPort;
-    private boolean isToneActionUsed;
+    private final boolean isToneActionUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -336,8 +337,13 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        //the axis names(getAxis) should be taken as input for gyro sensor however the implementations for that don't exist in GyroSensor.java
-        //this.sb.append("myGyro.getAngle" + "(" + gyroSensor.getAxis() + ")");
+        this.sb.append("myGyro.getGyro" + gyroSensor.getMode().toString() + "()");
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        this.sb.append("myGyro.getAngle" + accelerometer.getCoordinate() + "()");
         return null;
     }
 
@@ -733,8 +739,11 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     }
                     break;
                 case COMPASS:
-                case GYRO:
-                    this.sb.append("MEGyro myGyro");
+                case GYROSCOPE:
+                    this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
+                    break;
+                case ACCELEROMETER:
+                    this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;
                 case SOUND:
                     this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
@@ -754,4 +763,5 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             //nlIndent();
         }
     }
+
 }
